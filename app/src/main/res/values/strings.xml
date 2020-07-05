@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Firebase-Visualizer</string>
+    <string name="app_name">파이어베이스 뷰어</string>
     <string name="title_activity_viewer">ViewerActivity</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
