@@ -11,26 +11,43 @@
         android:id="@+id/toolBar"
         layout="@layout/toolbar_main" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <Button
+        android:id="@+id/viewer_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="268dp"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_height="100dp"
+        android:layout_marginTop="110dp"
+        android:background="@drawable/rounded_button"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/viewer_button_description"
+        android:textColor="@android:color/background_dark"
+        android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@+id/toolBar"
-        tools:layout_editor_absoluteX="16dp">
+        tools:layout_editor_absoluteX="0dp" />
 
-        <Button
-            android:id="@+id/viewer_button"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_button"
-            android:text="Firestore DB 조회"
-            android:textColor="@android:color/background_dark"
-            android:textSize="18sp" />
+    <Button
+        android:id="@+id/manual_button"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="#7986CB"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/manual_button_description"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@+id/viewer_button"
+        tools:layout_editor_absoluteX="16dp" />
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/github_button"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="#9575CD"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/github_button_description"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@+id/manual_button"
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

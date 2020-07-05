@@ -1,5 +1,7 @@
 package xyz.dps0340.firestore_visualizer
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
@@ -23,6 +25,8 @@ class MainActivity : AppCompatActivity() {
 
 
         val viewerButton = findViewById<Button>(R.id.viewer_button)
+        val manualButton = findViewById<Button>(R.id.manual_button)
+        val githubButton = findViewById<Button>(R.id.github_button)
 
         viewerButton.setOnClickListener {
             if(isApiKeyExists == 0) {
@@ -30,6 +34,14 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             startActivity<ViewerActivity>()
+        }
+
+        manualButton.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://dps0340.github.io/Firebase-Visualizer/")))
+        }
+
+        githubButton.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DPS0340/Firebase-Visualizer")))
         }
     }
 }

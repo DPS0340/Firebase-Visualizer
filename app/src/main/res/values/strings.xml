@@ -5,4 +5,7 @@
     <string name="previous">Previous</string>
     <string name="title">Firebase Visualizer</string>
     <string name="firebase_logo_description">Firebase logo</string>
+    <string name="github_button_description">Github 레포지토리로 이동</string>
+    <string name="viewer_button_description">Firestore DB 조회</string>
+    <string name="manual_button_description">매뉴얼 페이지로 이동</string>
 </resources>
