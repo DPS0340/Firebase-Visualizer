@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="xyz.dps0340.firestore_visualizer">
+    package="xyz.dps0340.firebase_visualizer">
 
     <application
         android:allowBackup="true"
@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".ViewerActivity"
+            android:name="xyz.dps0340.firebase_visualizer.ViewerActivity"
             android:label="@string/title_activity_viewer"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity">
+        <activity android:name="xyz.dps0340.firebase_visualizer.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

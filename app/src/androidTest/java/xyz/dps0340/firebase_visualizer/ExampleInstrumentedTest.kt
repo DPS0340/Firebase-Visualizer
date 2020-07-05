@@ -1,4 +1,4 @@
-package xyz.dps0340.firestore_visualizer
+package xyz.dps0340.firebase_visualizer
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

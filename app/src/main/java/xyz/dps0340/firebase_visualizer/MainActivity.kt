@@ -1,4 +1,4 @@
-package xyz.dps0340.firestore_visualizer
+package xyz.dps0340.firebase_visualizer
 
 import android.content.Intent
 import android.net.Uri
