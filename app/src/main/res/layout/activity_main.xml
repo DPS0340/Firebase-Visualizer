@@ -27,7 +27,6 @@
             android:layout_height="100dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_button"
-            android:backgroundTint="#64B5F6"
             android:text="Firestore DB 조회"
             android:textColor="@android:color/background_dark"
             android:textSize="18sp" />

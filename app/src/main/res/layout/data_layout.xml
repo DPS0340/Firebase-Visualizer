@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/titleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#a6dcef"
+            android:minHeight="50dp"
+            tools:layout_editor_absoluteX="-145dp"
+            tools:layout_editor_absoluteY="245dp">
+
+            <ImageView
+                android:id="@+id/dropdown"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|right|top"
+                android:translationZ="100dp"
+                app:srcCompat="@drawable/down_arrow" />
+
+            <TextView
+                android:id="@+id/dataName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif-light"
+                android:gravity="start|center_vertical"
+                android:text="DATA NAME"
+                android:textColor="#2a363b"
+                android:textSize="28sp" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/contentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:backgroundTint="#a1eafb"
+            android:minHeight="50dp"
+            android:visibility="gone"
+            tools:layout_editor_absoluteX="-145dp"
+            tools:layout_editor_absoluteY="130dp">
+
+            <TextView
+                android:id="@+id/data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif-light"
+                android:gravity="start|center_vertical"
+                android:text="CONTENTS"
+                android:textColor="#b80d57"
+                android:textSize="28sp" />
+
+            <LinearLayout
+                android:id="@+id/nestedLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"></LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

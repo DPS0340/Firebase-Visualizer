@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "Firestore-Visualizer"
+rootProject.name = "Firebase-Visualizer"
