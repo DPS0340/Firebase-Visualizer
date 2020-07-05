@@ -2,7 +2,7 @@
 
 ## 소개
 
-![running1](images/running1.jpg =300x)
+![running1](images/running1.jpg)
 
 한국산업기술대학교 파이어베이스 특강에서 보조자료로 쓰이는 이 앱은 자신이 생성한 파이어베이스 db 구조를 실시간으로 볼 수 있는 앱입니다.
 
