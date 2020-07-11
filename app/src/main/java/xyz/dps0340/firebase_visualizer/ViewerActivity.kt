@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TableLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.iterator
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -23,6 +24,7 @@ class ViewerActivity : AppCompatActivity() {
     private lateinit var rootLayout: LinearLayout
     private lateinit var contentLayout: LinearLayout
     private lateinit var inflater: LayoutInflater
+    private lateinit var rootView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,69 +39,102 @@ class ViewerActivity : AppCompatActivity() {
 
         initRootLayout()
 
-        root.addValueEventListener(object : ValueEventListener {
+        root.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                refreshDataView()
+                val referenceString: String = getRefString(dataSnapshot.ref)
+                Log.i(getString(R.string.LOG_TAG_FIREBASE), "onDataChange Called!")
+                Log.i(getString(R.string.LOG_TAG_FIREBASE), "reference String: $referenceString")
+                val dataView: View = getParentView(referenceString) ?: return
+                refreshSubData(dataView, dataSnapshot)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 // Failed to read value
-                Log.w("FIREBASE", "Failed to read value.", error.toException())
+                Log.w("FIREBASE_VISUALIZER", "Failed to read value.", error.toException())
             }
         })
     }
 
-    private fun initRootLayout() {
-        val rootItem = inflater.inflate(R.layout.data_layout, null)
+    private fun getParentView(key: String?): View? {
+        if(key == null) {
+            return null
+        }
 
-        rootItem.cardView.titleView.dataName.text = "/"
-        rootItem.cardView.contentView.data.text = ""
-        rootItem.cardView.contentView.data.visibility = View.GONE
-        rootLayout = rootItem.cardView.contentView.nestedLayout
+        val dataView: View? = findDataViewByIdentifier(key)
+        val idx: Int = key.lastIndexOf("/")
+        if(dataView != null) {
+            return dataView
+        }
+        if(idx == -1) {
+            return rootView
+        }
+        return getParentView(key.substring(0, idx))
+    }
+
+    private fun findDataViewByIdentifier(id: String?): View? {
+        if(id == null) {
+            return null
+        }
+        return findDataViewCore(id, rootView)
+    }
+
+    private fun findDataViewCore(id: String, parent: View): View? {
+        if(parent.identifierName.text == id) {
+            return parent
+        }
+        for(elem in parent.cardView.contentView.nestedLayout) {
+            val res: View? = findDataViewCore(id, elem)
+            if(res != null) {
+                return res
+            }
+        }
+        return null
+    }
+
+    private fun initRootLayout() {
+        rootView = inflater.inflate(R.layout.data_layout, null)
+
+        rootView.cardView.titleView.dataName.text = "/"
+        rootView.cardView.contentView.data.text = ""
+        rootView.cardView.contentView.data.visibility = View.GONE
+        rootLayout = rootView.cardView.contentView.nestedLayout
         rootLayout.visibility = View.VISIBLE
-        contentLayout.addView(rootItem)
+        contentLayout.addView(rootView)
         contentLayout.invalidate()
-        rootItem.cardView.titleView.setOnClickListener {
-            if(rootItem.cardView.contentView.visibility == View.VISIBLE) {
-                rootItem.cardView.contentView.visibility = View.GONE
-                rootItem.cardView.titleView.dropdown.imageResource = R.drawable.down_arrow
+        rootView.cardView.titleView.setOnClickListener {
+            if(rootView.cardView.contentView.visibility == View.VISIBLE) {
+                rootView.cardView.contentView.visibility = View.GONE
+                rootView.cardView.titleView.dropdown.imageResource = R.drawable.down_arrow
             } else {
-                rootItem.cardView.contentView.visibility = View.VISIBLE
-                rootItem.cardView.titleView.dropdown.imageResource = R.drawable.up_arrow
+                rootView.cardView.contentView.visibility = View.VISIBLE
+                rootView.cardView.titleView.dropdown.imageResource = R.drawable.up_arrow
             }
         }
     }
 
-    private fun refreshDataView() {
-        rootLayout.removeAllViews()
-        root.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                refreshCore(rootLayout, dataSnapshot)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w("FIREBASE", "Failed to read value.", error.toException())
-            }
-        })
-    }
-
     private fun refreshSubData(parent: View, dataSnapshot: DataSnapshot) {
-        parent.cardView.contentView.data.text = ""
-        parent.cardView.contentView.data.visibility = View.GONE
-        val nestedLayout = parent.cardView.contentView.nestedLayout
+        val cardView = parent.cardView
+        val nestedLayout = cardView.contentView.nestedLayout
+        nestedLayout.removeAllViews()
+        cardView.contentView.data.text = ""
+        cardView.contentView.data.visibility = View.GONE
         nestedLayout.visibility = View.VISIBLE
         refreshCore(nestedLayout, dataSnapshot)
+    }
+
+    private fun getRefString(ref: DatabaseReference): String {
+        return URLDecoder.decode(ref.toString().substring(ref.root.toString().length), "UTF-8")
     }
 
     private fun refreshCore(layout: LinearLayout, dataSnapshot: DataSnapshot) {
         for (child in dataSnapshot.children) {
             val newItem = inflater.inflate(R.layout.data_layout, null)
             newItem.layoutParams = TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f)
-            newItem.cardView.titleView.dataName.text = URLDecoder.decode(child.ref.toString().substring(child.ref.root.toString().length), "UTF-8")
+            newItem.cardView.titleView.dataName.text = getRefString(child.ref)
             newItem.cardView.contentView.data.text = child.value.toString()
+            newItem.identifierName.text = newItem.cardView.titleView.dataName.text
             if(dataSnapshot.child(child.key.toString()).hasChildren()) {
-                Log.i("FIREBASE", "${child.key} is nested object")
+                Log.i(getString(R.string.LOG_TAG_FIREBASE), "${child.key} is nested object")
                 refreshSubData(newItem, dataSnapshot.child(child.key.toString()))
             } else {
                 newItem.cardView.contentView.data.text = child.value.toString()
