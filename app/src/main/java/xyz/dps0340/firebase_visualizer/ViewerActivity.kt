@@ -52,7 +52,7 @@ class ViewerActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {
                 // Failed to read value
-                Log.w("FIREBASE_VISUALIZER", "Failed to read value.", error.toException())
+                Log.w(getString(R.string.LOG_TAG_FIREBASE), "Failed to read value.", error.toException())
             }
         })
     }
