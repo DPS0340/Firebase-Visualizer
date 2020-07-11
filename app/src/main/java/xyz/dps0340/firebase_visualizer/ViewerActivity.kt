@@ -14,6 +14,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.data_layout.view.*
 import org.jetbrains.anko.imageResource
+import java.net.URLDecoder
 
 
 class ViewerActivity : AppCompatActivity() {
@@ -95,7 +96,7 @@ class ViewerActivity : AppCompatActivity() {
         for (child in dataSnapshot.children) {
             val newItem = inflater.inflate(R.layout.data_layout, null)
             newItem.layoutParams = TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f)
-            newItem.cardView.titleView.dataName.text = child.ref.toString().substring(child.ref.root.toString().length)
+            newItem.cardView.titleView.dataName.text = URLDecoder.decode(child.ref.toString().substring(child.ref.root.toString().length), "UTF-8")
             newItem.cardView.contentView.data.text = child.value.toString()
             if(dataSnapshot.child(child.key.toString()).hasChildren()) {
                 Log.i("FIREBASE", "${child.key} is nested object")
