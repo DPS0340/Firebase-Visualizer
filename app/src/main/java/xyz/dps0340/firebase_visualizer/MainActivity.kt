@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         githubButton.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DPS0340/Firebase-Visualizer")))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DPS0340/Firebase-Visualizer/")))
         }
     }
 }
