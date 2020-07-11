@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
+// 주석 TODO
+
 
 class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)

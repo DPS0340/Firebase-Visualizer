@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.data_layout.view.*
 import org.jetbrains.anko.imageResource
 import java.net.URLDecoder
 
+// 주석 TODO
+
 
 class ViewerActivity : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
