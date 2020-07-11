@@ -8,4 +8,5 @@
     <string name="github_button_description">Github 레포지토리로 이동</string>
     <string name="viewer_button_description">Firebase DB 조회</string>
     <string name="manual_button_description">매뉴얼 페이지로 이동</string>
+    <string name="LOG_TAG_FIREBASE">FIREBASE_VISUALIZER</string>
 </resources>
