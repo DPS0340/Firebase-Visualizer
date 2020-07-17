@@ -22,12 +22,12 @@ import java.net.URLDecoder
 
 class ViewerActivity : AppCompatActivity() {
     /*
-     private: 이 클래스에서만 접근 가능한 변수
-     lateinit var: 추후 한번의 초기화만 허용하고 그 후에는 수정이 불가능한 변수
-     : (타입): 변수 선언시 타입을 지정하여 선언한다.
+        private: 이 클래스에서만 접근 가능한 변수
+        lateinit var: 추후 한번의 초기화만 허용하고 그 후에는 수정이 불가능한 변수
+        : (타입): 변수 선언시 타입을 지정하여 선언한다.
         자바의 String a;와 비슷하고 변수가 lateinit var로 선언되지 않은 경우는 생략하여도 무방하다
 
-     상수는 val로 선언함: 실수를 방지하기 위해 바뀔 필요가 없는 변수는 상수로 선언하는것이 권장됨
+        상수는 val로 선언함: 실수를 방지하기 위해 바뀔 필요가 없는 변수는 상수로 선언하는것이 권장됨
     */
     private lateinit var database: FirebaseDatabase
     private lateinit var root: DatabaseReference
