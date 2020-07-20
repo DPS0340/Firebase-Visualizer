@@ -60,8 +60,8 @@ class ViewerActivity : AppCompatActivity() {
 
         /*
             여러 lateinit var 변수 초기화
-
-         */
+            as 연산자: 형변환 연산자
+        */
         database = Firebase.database
         root = database.getReference("/")
         inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -101,7 +101,11 @@ class ViewerActivity : AppCompatActivity() {
             }
         })
     }
-
+    
+    
+    /*
+        상위 경로에 있는 뷰를 가져오는 메소드
+     */
     private fun getParentView(key: String?): View? {
         if(key == null) {
             return null
@@ -118,6 +122,9 @@ class ViewerActivity : AppCompatActivity() {
         return getParentView(key.substring(0, idx))
     }
 
+    /*
+        레이아웃에 있는 뷰를 textview 안의 text를 키로 써서 찾는 메소드
+     */
     private fun findDataViewByIdentifier(id: String?): View? {
         if(id == null) {
             return null
@@ -125,6 +132,10 @@ class ViewerActivity : AppCompatActivity() {
         return findDataViewCore(id, rootView)
     }
 
+    /*
+        findDataViewByIdentifier의 실제 동작이 이루어지는 메소드
+        재귀를 사용
+     */
     private fun findDataViewCore(id: String, parent: View): View? {
         if(parent.identifierName.text == id) {
             return parent
@@ -138,6 +149,9 @@ class ViewerActivity : AppCompatActivity() {
         return null
     }
 
+    /*
+        최상위 레이아웃을 만드는 메소드
+     */
     private fun initRootLayout() {
         rootView = inflater.inflate(R.layout.data_layout, null)
 
@@ -159,7 +173,9 @@ class ViewerActivity : AppCompatActivity() {
         }
     }
 
-
+    /*
+        갱신된 데이터를 이용해서 일부 변화된 레이아웃을 갱신하는 메소드
+     */
     private fun refreshSubData(parent: View, dataSnapshot: DataSnapshot) {
         val cardView = parent.cardView
         val nestedLayout = cardView.contentView.nestedLayout
@@ -170,10 +186,16 @@ class ViewerActivity : AppCompatActivity() {
         refreshCore(nestedLayout, dataSnapshot)
     }
 
+    /*
+        ref 변수를 통해 파일의 경로를 리턴하는 메소드
+     */
     private fun getRefString(ref: DatabaseReference): String {
         return URLDecoder.decode(ref.toString().substring(ref.root.toString().length), "UTF-8")
     }
 
+    /*
+        실제로 레이아웃 갱신이 이루어지는 메소드
+     */
     private fun refreshCore(layout: LinearLayout, dataSnapshot: DataSnapshot) {
         for (child in dataSnapshot.children) {
             val newItem = inflater.inflate(R.layout.data_layout, null)
