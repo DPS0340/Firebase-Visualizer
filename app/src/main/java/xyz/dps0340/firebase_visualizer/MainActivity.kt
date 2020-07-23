@@ -22,19 +22,11 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
 
-        val isApiKeyExists: Int = resources
-            .getIdentifier("google_api_key", "string", packageName)
-
-
         val viewerButton = findViewById<Button>(R.id.viewer_button)
         val manualButton = findViewById<Button>(R.id.manual_button)
         val githubButton = findViewById<Button>(R.id.github_button)
 
         viewerButton.setOnClickListener {
-            if(isApiKeyExists == 0) {
-                toast("인증 오류: app 폴더에 google-services.json을 추가 후 진행하세요. Firebase에서 발급받을 수 있습니다.")
-                return@setOnClickListener
-            }
             startActivity<ViewerActivity>()
         }
 
