@@ -17,15 +17,15 @@ import kotlinx.android.synthetic.main.data_layout.view.*
 import org.jetbrains.anko.imageResource
 import java.net.URLDecoder
 
-// 주석 TODO
-
-
+/*
+    뷰어 액티비티의 클래스
+ */
 class ViewerActivity : AppCompatActivity() {
     /*
         private: 이 클래스에서만 접근 가능한 변수
         lateinit var: 추후 한번의 초기화만 허용하고 그 후에는 수정이 불가능한 변수
         : (타입): 변수 선언시 타입을 지정하여 선언한다.
-        자바의 String a;와 비슷하고 변수가 lateinit var로 선언되지 않은 경우는 생략하여도 무방하다
+        자바의 String a;와 비슷하고 변수가 lateinit var로 선언되지 않은 경우는 타입을 생략하여도 무방하다
 
         상수는 val로 선언함: 실수를 방지하기 위해 바뀔 필요가 없는 변수는 상수로 선언하는것이 권장됨
     */
@@ -39,7 +39,7 @@ class ViewerActivity : AppCompatActivity() {
     /*
         액티비티 생성시 호출되는 메소드
         savedInstanceState: Bundle?의 의미:
-        Bundle 타입이나 null일수도 있는 savedInstanceState 매개변수를 가진다
+        onCreate 메소드는 Bundle 타입이나 null일수도 있는 savedInstanceState 매개변수를 가진다
     */
     override fun onCreate(savedInstanceState: Bundle?) {
         /*
@@ -62,9 +62,14 @@ class ViewerActivity : AppCompatActivity() {
             여러 lateinit var 변수 초기화
             as 연산자: 형변환 연산자
         */
+
+        // 데이터베이스 변수를 가져옴
         database = Firebase.database
+        // 데이터베이스의 루트 경로 레퍼런스(주소랑 비슷한 개념)를 가져옴
         root = database.getReference("/")
+        // 레이아웃 팩토리 가져옴
         inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        // xml상의 최상단 레이아웃 가져옴
         contentLayout = findViewById<LinearLayout>(R.id.contentLayout)
 
         
@@ -106,46 +111,59 @@ class ViewerActivity : AppCompatActivity() {
     /*
         상위 경로에 있는 뷰를 가져오는 메소드
      */
-    private fun getParentView(key: String?): View? {
-        if(key == null) {
+    private fun getParentView(path: String?): View? {
+        // 경로값이 null이면 null을 반환
+        if(path == null) {
             return null
         }
 
-        val dataView: View? = findDataViewByIdentifier(key)
-        val idx: Int = key.lastIndexOf("/")
+        // 경로값을 통해 뷰를 가져옴
+        val dataView: View? = findDataViewByTitle(path)
+        // 경로값의 맨 마지막 /의 인덱스를 가져옴
+        val idx: Int = path.lastIndexOf("/")
+        // dataView가 있으면 null을 반환
         if(dataView != null) {
             return dataView
         }
+        // 더 상위 경로가 없다면 rootView를 반환
         if(idx == -1) {
             return rootView
         }
-        return getParentView(key.substring(0, idx))
+        // 둘다 아니라면 부모 경로로 재귀호출
+        return getParentView(path.substring(0, idx))
     }
 
     /*
-        레이아웃에 있는 뷰를 textview 안의 text를 키로 써서 찾는 메소드
+        레이아웃에 있는 뷰를 타이틀을 키로 써서 찾는 메소드
      */
-    private fun findDataViewByIdentifier(id: String?): View? {
+    private fun findDataViewByTitle(id: String?): View? {
+        // id가 null이면 null을 반환
         if(id == null) {
             return null
         }
+        // 실제 동작이 이루어지는 코어 함수를 호출해서 반환
         return findDataViewCore(id, rootView)
     }
 
     /*
-        findDataViewByIdentifier의 실제 동작이 이루어지는 메소드
+        findDataViewByTitle의 실제 동작이 이루어지는 메소드
         재귀를 사용
      */
-    private fun findDataViewCore(id: String, parent: View): View? {
-        if(parent.identifierName.text == id) {
-            return parent
+    private fun findDataViewCore(id: String, currentView: View): View? {
+        // 타이틀이 일치할 경우 현재 뷰를 반환
+        if(currentView.cardView.titleView.dataName.text == id) {
+            return currentView
         }
-        for(elem in parent.cardView.contentView.nestedLayout) {
+        // 일치하지 않을 경우 자식 뷰를 탐색
+        for(elem in currentView.cardView.contentView.nestedLayout) {
+            // 재귀적으로 탐색한다 - 깊이 우선 탐색을 사용
             val res: View? = findDataViewCore(id, elem)
+            // 일치하는 뷰가 있으면 뷰를 반환
             if(res != null) {
                 return res
             }
         }
+        // 없으면 null 반환
         return null
     }
 
@@ -153,35 +171,40 @@ class ViewerActivity : AppCompatActivity() {
         최상위 레이아웃을 만드는 메소드
      */
     private fun initRootLayout() {
+        // rootView 초기화
         rootView = inflater.inflate(R.layout.data_layout, null)
 
+        // 제목을 /로 설정
         rootView.cardView.titleView.dataName.text = "/"
+        // 파일이 아니라 디렉토리 형식이니 스스로의 데이터는 없어야함
+        // 빈 문자열로 초기화
         rootView.cardView.contentView.data.text = ""
+        // 데이터 부분을 숨긴다
         rootView.cardView.contentView.data.visibility = View.GONE
+        // 자식 객체들을 담는 레이아웃 초기화
         rootLayout = rootView.cardView.contentView.nestedLayout
+        // 레이아웃을 볼수 있게 한다
         rootLayout.visibility = View.VISIBLE
+        // 실제 레이아웃에 바인딩
         contentLayout.addView(rootView)
+        // 레이아웃을 다시 렌더링해서 사용자가 볼 수 있게 한다
         contentLayout.invalidate()
-        rootView.cardView.titleView.setOnClickListener {
-            if(rootView.cardView.contentView.visibility == View.VISIBLE) {
-                rootView.cardView.contentView.visibility = View.GONE
-                rootView.cardView.titleView.dropdown.imageResource = R.drawable.down_arrow
-            } else {
-                rootView.cardView.contentView.visibility = View.VISIBLE
-                rootView.cardView.titleView.dropdown.imageResource = R.drawable.up_arrow
-            }
-        }
+        // 타이틀 클릭시 내용이 보이거나 사라지게하는 리스너 추가
+        addOnClickToggleVisibleListener(rootView.cardView.titleView)
     }
 
     /*
         갱신된 데이터를 이용해서 일부 변화된 레이아웃을 갱신하는 메소드
      */
-    private fun refreshSubData(parent: View, dataSnapshot: DataSnapshot) {
-        val cardView = parent.cardView
+    private fun refreshSubData(currentView: View, dataSnapshot: DataSnapshot) {
+        val cardView = currentView.cardView
         val nestedLayout = cardView.contentView.nestedLayout
+        // 현재 객체의 기존 레이아웃 초기화
         nestedLayout.removeAllViews()
+        // 내용 문자열 빈 문자열로 대입 후 숨긴다
         cardView.contentView.data.text = ""
         cardView.contentView.data.visibility = View.GONE
+        // 자식 객체를 보여주는 레이아웃을 볼 수 있게 한다
         nestedLayout.visibility = View.VISIBLE
         refreshCore(nestedLayout, dataSnapshot)
     }
@@ -190,35 +213,57 @@ class ViewerActivity : AppCompatActivity() {
         ref 변수를 통해 파일의 경로를 리턴하는 메소드
      */
     private fun getRefString(ref: DatabaseReference): String {
+        /*
+            ref을 문자열로 바꾼 후 도메인 부분을 제거한 후 url 인코딩을 원래 문자로 바꾼 후 리턴
+         */
         return URLDecoder.decode(ref.toString().substring(ref.root.toString().length), "UTF-8")
+    }
+
+    /*
+        해당 뷰가 보일때 클릭하면 사라지게 하고,
+        뷰가 보이지 않을때 클릭하면 보이게 한다
+        클릭시 화살표 이미지도 변경됨
+     */
+    private fun addOnClickToggleVisibleListener(target: View) {
+        target.setOnClickListener {
+            if(target.cardView.contentView.visibility == View.VISIBLE) {
+                target.cardView.contentView.visibility = View.GONE
+                target.cardView.titleView.dropdown.imageResource = R.drawable.down_arrow
+            } else {
+                target.cardView.contentView.visibility = View.VISIBLE
+                target.cardView.titleView.dropdown.imageResource = R.drawable.up_arrow
+            }
+        }
     }
 
     /*
         실제로 레이아웃 갱신이 이루어지는 메소드
      */
     private fun refreshCore(layout: LinearLayout, dataSnapshot: DataSnapshot) {
+        // 현재 스냅샷의 자식 객체들을 반복
         for (child in dataSnapshot.children) {
+            // 새로운 자식 레이아웃 객체 생성
             val newItem = inflater.inflate(R.layout.data_layout, null)
+            // 레이아웃 width, height, weight 설정
             newItem.layoutParams = TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f)
+            // 타이틀 이름 대입
             newItem.cardView.titleView.dataName.text = getRefString(child.ref)
-            newItem.cardView.contentView.data.text = child.value.toString()
-            newItem.identifierName.text = newItem.cardView.titleView.dataName.text
+            // 자식 객체에 또다른 자식들이 있을 경우
             if(dataSnapshot.child(child.key.toString()).hasChildren()) {
+                // 디버깅에 용이하게 로그를 남김
                 Log.i(getString(R.string.LOG_TAG_FIREBASE), "${child.key} is nested object")
+                // 재귀적으로 레이아웃 초기화
                 refreshSubData(newItem, dataSnapshot.child(child.key.toString()))
-            } else {
+            } else { // 자식들이 없을 경우
+                // 데이터 값을 대입
                 newItem.cardView.contentView.data.text = child.value.toString()
             }
-            newItem.cardView.titleView.setOnClickListener {
-                if(newItem.cardView.contentView.visibility == View.VISIBLE) {
-                    newItem.cardView.contentView.visibility = View.GONE
-                    newItem.cardView.titleView.dropdown.imageResource = R.drawable.down_arrow
-                } else {
-                    newItem.cardView.contentView.visibility = View.VISIBLE
-                    newItem.cardView.titleView.dropdown.imageResource = R.drawable.up_arrow
-                }
-            }
+
+            // 타이틀 클릭시 내용이 보이거나 사라지게하는 리스너 추가
+            addOnClickToggleVisibleListener(newItem.cardView.titleView)
+            // 현재 레이아웃에 자식 레이아웃 추가
             layout.addView(newItem)
+            // 사용자가 볼 수 있게끔 레이아웃을 다시 렌더링
             layout.invalidate()
         }
     }
