@@ -25,7 +25,7 @@ class ViewerActivity : AppCompatActivity() {
         private: 이 클래스에서만 접근 가능한 변수
         lateinit var: 추후 한번의 초기화만 허용하고 그 후에는 수정이 불가능한 변수
         : (타입): 변수 선언시 타입을 지정하여 선언한다.
-        자바의 String a;와 비슷하고 변수가 lateinit var로 선언되지 않은 경우는 타입을 생략하여도 무방하다
+        자바의 (타입) (변수명);과 비슷하고 변수가 lateinit var로 선언되지 않은 경우는 타입을 생략하여도 무방하다
 
         상수는 val로 선언함: 실수를 방지하기 위해 바뀔 필요가 없는 변수는 상수로 선언하는것이 권장됨
     */
@@ -199,13 +199,14 @@ class ViewerActivity : AppCompatActivity() {
     private fun refreshSubData(currentView: View, dataSnapshot: DataSnapshot) {
         val cardView = currentView.cardView
         val nestedLayout = cardView.contentView.nestedLayout
-        // 현재 객체의 기존 레이아웃 초기화
+        // 현재 객체의 기존 뷰 삭제
         nestedLayout.removeAllViews()
         // 내용 문자열 빈 문자열로 대입 후 숨긴다
         cardView.contentView.data.text = ""
         cardView.contentView.data.visibility = View.GONE
         // 자식 객체를 보여주는 레이아웃을 볼 수 있게 한다
         nestedLayout.visibility = View.VISIBLE
+        // 현재 객체의 자식 뷰 갱신
         refreshCore(nestedLayout, dataSnapshot)
     }
 
@@ -261,7 +262,7 @@ class ViewerActivity : AppCompatActivity() {
 
             // 타이틀 클릭시 내용이 보이거나 사라지게하는 리스너 추가
             addOnClickToggleVisibleListener(newItem.cardView.titleView)
-            // 현재 레이아웃에 자식 레이아웃 추가
+            // 현재 레이아웃에 자식 뷰 추가
             layout.addView(newItem)
             // 사용자가 볼 수 있게끔 레이아웃을 다시 렌더링
             layout.invalidate()
