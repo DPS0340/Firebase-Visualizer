@@ -40,7 +40,7 @@
                     android:textColor="#FBE9E7"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/dropdown"
