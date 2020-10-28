@@ -6,7 +6,7 @@
     <string name="title">Attman Manager</string>
     <string name="firebase_logo_description">Firebase logo</string>
     <string name="github_button_description">Github 레포지토리로 이동</string>
-    <string name="viewer_button_description">Firebase DB 조회</string>
+    <string name="viewer_button_description">출석체크 관리</string>
     <string name="manual_button_description">매뉴얼 페이지로 이동</string>
     <string name="LOG_TAG_FIREBASE">FIREBASE_VISUALIZER</string>
 </resources>
