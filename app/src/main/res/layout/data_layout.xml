@@ -22,20 +22,43 @@
             tools:layout_editor_absoluteX="-145dp"
             tools:layout_editor_absoluteY="245dp">
 
-            <ImageView
-                android:id="@+id/dropdown"
-                android:layout_width="60dp"
+            <LinearLayout
+                android:id="@+id/DropdownLayout"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center|right|top"
-                android:translationZ="100dp"
-                app:srcCompat="@drawable/down_arrow" />
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/checkButton"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="230dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#5C6BC0"
+                    android:text="출석체크"
+                    android:textColor="#FBE9E7"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/dropdown"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center|right|top"
+                    android:translationZ="100dp"
+                    app:srcCompat="@drawable/down_arrow" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/dataName"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
                 android:gravity="start|center_vertical"
+                android:minHeight="50dp"
                 android:text="DATA NAME"
                 android:textColor="#2a363b"
                 android:textSize="28sp" />
