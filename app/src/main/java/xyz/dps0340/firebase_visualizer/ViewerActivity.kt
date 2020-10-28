@@ -246,6 +246,7 @@ class ViewerActivity : AppCompatActivity() {
         실제로 레이아웃 갱신이 이루어지는 메소드
      */
     private fun refreshCore(layout: LinearLayout, dataSnapshot: DataSnapshot) {
+        val refString = getRefString(dataSnapshot.ref)
         // 현재 스냅샷의 자식 객체들을 반복
         for (child in dataSnapshot.children) {
             // 새로운 자식 레이아웃 객체 생성
@@ -260,6 +261,8 @@ class ViewerActivity : AppCompatActivity() {
                 newItem.cardView.dataName.text = "result"
             } else if(childRef.contains("result")) {
                 newItem.cardView.dataName.text = "result/${childRef.split('/').last()}"
+            } else if(childRef.startsWith("/userinfos/")) {
+                newItem.cardView.dataName.text = childRef.split('/').last()
             } else {
                 newItem.cardView.dataName.text = childRef
             }
@@ -271,23 +274,21 @@ class ViewerActivity : AppCompatActivity() {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val case = snapshot.getValue<Case>()
                             case?.let {
+                                newItem.cardView.DropdownLayout.dataName.text = case.date
                                 if(case.checkedByAdmin) {
                                     checkButton.text = checkedText
                                 } else {
                                     checkButton.text = notCheckedText
                                 }
-                                checkButton.setOnClickListener(object :
-                                    View.OnClickListener {
-                                        override fun onClick(p0: View?) {
-                                            case.checkedByAdmin = !case.checkedByAdmin
-                                            child.ref.setValue(case)
-                                            if(case.checkedByAdmin) {
-                                                checkButton.text = checkedText
-                                            } else {
-                                                checkButton.text = notCheckedText
-                                            }
-                                        }
-                                })
+                                checkButton.setOnClickListener {
+                                    case.checkedByAdmin = !case.checkedByAdmin
+                                    child.ref.setValue(case)
+                                    if (case.checkedByAdmin) {
+                                        checkButton.text = checkedText
+                                    } else {
+                                        checkButton.text = notCheckedText
+                                    }
+                                }
                             }
                         }
 
