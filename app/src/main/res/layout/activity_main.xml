@@ -28,7 +28,6 @@
         android:id="@+id/github_button"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="68dp"
         android:layout_marginBottom="297dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="#9575CD"
@@ -37,7 +36,6 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewer_button" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
