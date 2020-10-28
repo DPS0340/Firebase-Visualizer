@@ -156,7 +156,7 @@ class ViewerActivity : AppCompatActivity() {
      */
     private fun findDataViewCore(id: String, currentView: View): View? {
         // 타이틀이 일치할 경우 현재 뷰를 반환
-        if(currentView.cardView.titleView.dataName.text == id) {
+        if(currentView.cardView.dataName.text == id) {
             return currentView
         }
         // 일치하지 않을 경우 자식 뷰를 탐색
@@ -180,7 +180,7 @@ class ViewerActivity : AppCompatActivity() {
         rootView = inflater.inflate(R.layout.data_layout, null)
 
         // 제목을 /로 설정
-        rootView.cardView.titleView.dataName.text = "/"
+        rootView.cardView.dataName.text = "/"
         // 파일이 아니라 디렉토리 형식이니 스스로의 데이터는 없어야함
         // 빈 문자열로 초기화
         rootView.cardView.contentView.data.text = ""
@@ -231,13 +231,13 @@ class ViewerActivity : AppCompatActivity() {
         클릭시 화살표 이미지도 변경됨
      */
     private fun addOnClickToggleVisibleListener(target: View) {
-        target.cardView.titleView.DropdownLayout.dropdown.setOnClickListener {
+        target.cardView.DropdownLayout.dropdown.setOnClickListener {
             if(target.cardView.contentView.visibility == View.VISIBLE) {
                 target.cardView.contentView.visibility = View.GONE
-                target.cardView.titleView.DropdownLayout.dropdown.imageResource = R.drawable.down_arrow
+                target.cardView.DropdownLayout.dropdown.imageResource = R.drawable.down_arrow
             } else {
                 target.cardView.contentView.visibility = View.VISIBLE
-                target.cardView.titleView.DropdownLayout.dropdown.imageResource = R.drawable.up_arrow
+                target.cardView.DropdownLayout.dropdown.imageResource = R.drawable.up_arrow
             }
         }
     }
@@ -254,8 +254,16 @@ class ViewerActivity : AppCompatActivity() {
             newItem.layoutParams = TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f)
             // 타이틀 이름 대입
             val childRef = getRefString(child.ref)
-            newItem.cardView.titleView.dataName.text = childRef
-            val checkButton = newItem.cardView.titleView.DropdownLayout.checkButton
+            if(childRef.startsWith("/cases/") && !childRef.contains("result")) {
+                newItem.cardView.dataName.text = childRef.split('/').last()
+            } else if(childRef.contains("result") && dataSnapshot.child(child.key.toString()).hasChildren()) {
+                newItem.cardView.dataName.text = "result"
+            } else if(childRef.contains("result")) {
+                newItem.cardView.dataName.text = "result/${childRef.split('/').last()}"
+            } else {
+                newItem.cardView.dataName.text = childRef
+            }
+            val checkButton = newItem.cardView.DropdownLayout.checkButton
             if(childRef.startsWith("/cases/") && !childRef.contains("result") && dataSnapshot.child(child.key.toString()).hasChildren()) {
                 checkButton.visibility = View.VISIBLE
                 child.ref.addListenerForSingleValueEvent(
@@ -294,7 +302,11 @@ class ViewerActivity : AppCompatActivity() {
                 // 디버깅에 용이하게 로그를 남김
                 Log.i(getString(R.string.LOG_TAG_FIREBASE), "${child.key} is nested object")
                 // 재귀적으로 레이아웃 초기화
-                refreshSubData(newItem, dataSnapshot.child(child.key.toString()))
+                if(childRef.startsWith("/cases/") && !childRef.contains("result")) {
+                    refreshSubData(newItem, dataSnapshot.child(child.key.toString()))
+                } else {
+                    refreshSubData(newItem, dataSnapshot.child(child.key.toString()))
+                }
             } else { // 자식들이 없을 경우
                 // 데이터 값을 대입
                 newItem.cardView.contentView.data.text = child.value.toString()
