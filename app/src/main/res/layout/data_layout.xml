@@ -62,7 +62,7 @@
                 android:minHeight="50dp"
                 android:text="DATA NAME"
                 android:textColor="#2a363b"
-                android:textSize="28sp" />
+                android:textSize="18sp" />
 
         </androidx.cardview.widget.CardView>
 
