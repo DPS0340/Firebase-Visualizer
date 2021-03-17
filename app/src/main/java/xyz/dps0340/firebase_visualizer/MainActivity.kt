@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
             레이아웃에 있는 Button 객체를 xml id값으로 가져온다
          */
         val viewerButton = findViewById<Button>(R.id.viewer_button)
-        val manualButton = findViewById<Button>(R.id.manual_button)
         val githubButton = findViewById<Button>(R.id.github_button)
 
         /*
@@ -46,14 +45,6 @@ class MainActivity : AppCompatActivity() {
             startActivity<ViewerActivity>()
         }
 
-        /*
-            manual_button의 클릭 이벤트를 정의한다
-         */
-        manualButton.setOnClickListener {
-            // 웹 브라우저 Intent가 동작된다
-            // 매뉴얼 url로 이동됨
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://dps0340.github.io/Firebase-Visualizer/")))
-        }
 
         /*
             github_button의 클릭 이벤트를 정의한다
@@ -61,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         githubButton.setOnClickListener {
             // 웹 브라우저 Intent가 동작된다
             // 깃허브 url로 이동됨
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DPS0340/Firebase-Visualizer/")))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/KPU-KSLA/Firebase-Visualizer/")))
         }
     }
 }

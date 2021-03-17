@@ -25,29 +25,17 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <Button
-        android:id="@+id/manual_button"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="35dp"
-        android:background="@drawable/rounded_button"
-        android:backgroundTint="#7986CB"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/manual_button_description"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@+id/viewer_button"
-        tools:layout_editor_absoluteX="16dp" />
-
-    <Button
         android:id="@+id/github_button"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginBottom="297dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="#9575CD"
         android:fontFamily="sans-serif-light"
         android:text="@string/github_button_description"
         android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@+id/manual_button"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
